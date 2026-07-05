@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MAFKAZ</title>
-    <!-- Телеграм Mini App скриптін қосамыз -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
@@ -63,9 +62,10 @@
         }
         .footer {
             margin-top: 30px;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             color: #45f3ff;
             text-shadow: 0 0 5px #45f3ff;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -75,29 +75,33 @@
         <h1>MAFKAZ</h1>
         <div class="subtitle">Қазақша мафия ойыны</div>
 
-        <!-- Батырмалар -->
         <button class="btn" onclick="clickButton('ОЙЫНДЫ БАСТАУ')">ОЙЫНДЫ БАСТАУ</button>
         <button class="btn btn-secondary" onclick="clickButton('БӨЛМЕ ҚҰРУ')">БӨЛМЕ ҚҰРУ</button>
         <button class="btn btn-secondary" onclick="clickButton('БӨЛМЕГЕ КІРУ')">БӨЛМЕГЕ КІРУ</button>
         <button class="btn btn-secondary" onclick="clickButton('ПАРАМЕТРЛЕР')">ПАРАМЕТРЛЕР</button>
 
-        <div class="footer">RANK: ЖАС МАФИЯ</div>
+        <!-- Осы жерде ID арқылы мәтінді өзгертетін боламыз -->
+        <div class="footer" id="player-info">RANK: ЖАС МАФИЯ</div>
     </div>
 
     <script>
-        // Телеграм Mini App-ты іске қосу
         const tg = window.Telegram.WebApp;
-        tg.ready(); // Телеграмға беттің дайын екенін білдіру
-        tg.expand(); // Ойын терезесін телефонда толық экранға ашу
+        tg.ready();
+        tg.expand();
 
-        // Батырма басылғанда істейтін функция
+        // Телеграмнан кіріп тұрған қолданушының мәліметін алу
+        const user = tg.initDataUnsafe?.user;
+        
+        if (user) {
+            // Егер қолданушының есімі анықталса, оны экранның астына шығарамыз
+            const firstName = user.first_name || "Ойыншы";
+            document.getElementById('player-info').innerText = ${firstName.toUpperCase()} | ЖАС МАФИЯ;
+        }
+
         function clickButton(name) {
-            // Телефонды кішкене дірілдету (Haptic Feedback)
             if (tg.HapticFeedback) {
                 tg.HapticFeedback.impactOccurred('medium');
             }
-            
-            // Телеграмның өз ішінде әдемі жүйелік хабарлама шығару
             tg.showAlert(`Сіз "${name}" бөлімін таңдадыңыз. Бұл функция жақында қосылады!`);
         }
     </script>
